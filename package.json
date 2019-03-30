@@ -1,0 +1,28 @@
+{
+  "name": "vagasbrapi",
+  "version": "1.0.0",
+  "description": "An api to store opportunities from a lot of github repositories",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app/index.js"
+  },
+  "keywords": [
+    "api",
+    "vagas",
+    "frontendbr",
+    "backendbr",
+    "fullstackbr"
+  ],
+  "author": "Ermesom Barros",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "dotenv": "^7.0.0",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.20"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  }
+}
