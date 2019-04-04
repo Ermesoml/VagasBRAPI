@@ -9,7 +9,7 @@ class scheduleVagas {
   async AtualizarVagasRepositorios (){
     for (let i = 0; i < repositorios.length; i++) {
       try{
-        await this.databaseInstance.InserirAtualizarVagasBanco(await this.BuscarVagasURL(repositorios[i].url));
+        await this.databaseInstance.InserirAtualizarVagasBanco(await this.BuscarVagasURL(repositorios[i].url, repositorios[i].nome));
       }
       catch(err){
         console.error(err)

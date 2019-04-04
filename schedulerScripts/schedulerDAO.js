@@ -6,13 +6,14 @@ class scheduleDatabase {
     mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useFindAndModify: false})
   }
 
-  async InserirAtualizarVagasBanco(vagas){
+  async InserirAtualizarVagasBanco(vagas, repoName){
     let github_ids = [];
     for (let i = 0; i < vagas.length; i++) {
       vagas[i].status = 'ABE';
       vagas[i].updated_at = Date.now();
       vagas[i].user_login = vagas[i].user.login;
       vagas[i].user_avatar_url = vagas[i].user.avatar_url;
+      vagas[i].repo_name = repoName;
 
       await Vaga.findOneAndUpdate({github_id: vagas[i].id}, vagas[i], {upsert:true, setDefaultsOnInsert: true}).exec();
       console.log(`Vaga salva github_id: ${vagas[i].id} Contagem: ${i+1} de ${vagas.length}`);

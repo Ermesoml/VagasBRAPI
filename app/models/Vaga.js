@@ -17,6 +17,7 @@ VagaSchema = new mongoose.Schema({
   },
   labels: [],
   user_avatar_url: String,
+  repo_name: String
 })
 
 module.exports = mongoose.model('Vaga', VagaSchema);
