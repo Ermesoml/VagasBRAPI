@@ -15,7 +15,7 @@ class scheduleDatabase {
       vagas[i].user_avatar_url = vagas[i].user.avatar_url;
 
       await Vaga.findOneAndUpdate({github_id: vagas[i].id}, vagas[i], {upsert:true, setDefaultsOnInsert: true}).exec();
-      console.log(`Vaga salva github_id: ${vagas[i].id} Contagem: ${i+1}`);
+      console.log(`Vaga salva github_id: ${vagas[i].id} Contagem: ${i+1} de ${vagas.length}`);
 
       github_ids.push(vagas[i].id);
     }
@@ -23,7 +23,7 @@ class scheduleDatabase {
     console.log('Atualizando vagas fechadas')
     await Vaga.updateMany( { github_id: { $nin: github_ids} }, { $set: { updated_at: Date.now(), status: 'BAI' } } )
     
-    console.log('Processo de busca de vagas finalizado')
+    console.log('Vagas atualizadas no banco com sucesso')
     return;
   }
 }

@@ -1,12 +1,23 @@
 const axios = require('axios');
+const repositorios = require('./repositorios.js')
+const scheduleDatabase = require('./schedulerDAO.js')
 
 class scheduleVagas {
   constructor() {
-    
+    this.databaseInstance = new scheduleDatabase();
   }
-  async BuscarTodasVagasRepositorio (){
-    let respostaVagas = await this.BuscarVagasURL("https://api.github.com/repos/frontendbr/vagas/issues?state=open");
-    return respostaVagas;
+  async AtualizarVagasRepositorios (){
+    for (let i = 0; i < repositorios.length; i++) {
+      try{
+        await this.databaseInstance.InserirAtualizarVagasBanco(await this.BuscarVagasURL(repositorios[i].url));
+      }
+      catch(err){
+        console.error(err)
+        process.exit();
+      }
+      
+    }
+    return true;
   }
 
   async BuscarVagasURL(url){
@@ -14,7 +25,7 @@ class scheduleVagas {
 
     console.log('Buscando dados da api: ' + url);
 
-    return await axios.get(url).then(async (response) => {      
+    return await axios.get(url, {auth: {username: process.env.BASIC_USER, password: process.env.BASIC_PASS}}).then(async (response) => {      
       let proximaUrl = await this.BuscarProximaURL(response.headers);
       let proximasVagas = await this.BuscarVagasURL(proximaUrl);
       return [...response.data, ...proximasVagas];
