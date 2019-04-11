@@ -7,7 +7,12 @@ module.exports = {
   },
 
   async findById(req, res){
-    const vaga = await Vaga.findOne({_id: req.query.vaga_id});
-    return res.json(vaga);
+    try{
+      const vaga = await Vaga.findOne({_id: req.params.vaga_id});
+      return res.json(vaga);
+    }
+    catch(err){
+      return res.json('{mensagem: Vaga mão encontrada!}')
+    }
   },
 }
