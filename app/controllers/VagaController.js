@@ -6,8 +6,6 @@ module.exports = {
     let filtroTituloVaga = req.query.filtroTituloVaga ? req.query.filtroTituloVaga : ' ';
     let quantidade_por_pagina = 12;
 
-    console.log(filtroTituloVaga)
-
     const vagas = await Vaga.find({title: { $regex: '.*' + filtroTituloVaga + '.*' }}).sort({created_at: -1}).limit(quantidade_por_pagina).skip(quantidade_por_pagina * pagina);
     return res.json(vagas);
   },
