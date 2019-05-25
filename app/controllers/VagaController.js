@@ -3,10 +3,10 @@ const Vaga = require('../models/Vaga');
 module.exports = {
   async index(req, res){
     let pagina = req.query.pagina ? req.query.pagina : 1;
-    let filtroTituloVaga = req.query.filtroTituloVaga ? req.query.filtroTituloVaga : ' ';
+    let filtroVaga = req.query.filtroTituloVaga ? req.query.filtroTituloVaga : ' ';
     let quantidade_por_pagina = 12;
 
-    const vagas = await Vaga.find({title: new RegExp(filtroTituloVaga.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')}).sort({created_at: -1}).limit(quantidade_por_pagina).skip(quantidade_por_pagina * (pagina - 1));
+    const vagas = await Vaga.find({ $or: [{title: new RegExp(filtroVaga.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')}, {body: new RegExp(filtroVaga.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')}]}).sort({created_at: -1}).limit(quantidade_por_pagina).skip(quantidade_por_pagina * (pagina - 1));
     return res.json(vagas);
   },
 
