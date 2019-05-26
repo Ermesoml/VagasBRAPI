@@ -27,4 +27,12 @@ module.exports = [
     nome: 'CocoaHeadsBrasil',
     url: 'https://api.github.com/repos/CocoaHeadsBrasil/vagas/issues?state=open'
   },
+  {
+    nome: 'vuejs-br',
+    url: 'https://api.github.com/repos/vuejs-br/vagas/issues?state=open'
+  },
+  {
+    nome: 'CangaceirosDevels',
+    url: 'https://api.github.com/repos/CangaceirosDevels/vagas/issues?state=open'
+  },
 ]
