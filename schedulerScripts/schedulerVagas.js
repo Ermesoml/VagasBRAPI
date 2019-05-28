@@ -27,7 +27,7 @@ class scheduleVagas {
 
     return await axios.get(url, {auth: {username: process.env.BASIC_USER, password: process.env.BASIC_PASS}}).then(async (response) => {      
       let proximaUrl = await this.BuscarProximaURL(response.headers);
-      let proximasVagas = await this.BuscarVagasURL(proximaUrl);
+      let proximasVagas = proximaUrl ? await this.BuscarVagasURL(proximaUrl) : [];
       return [...response.data, ...proximasVagas];
     });
   }
@@ -35,14 +35,20 @@ class scheduleVagas {
   async BuscarProximaURL(headers){
     let links = headers.link;
     let proximaUrl = '';
-    links.replace(new RegExp("(<([^,]*))", "g"), function($0, $1, $2, $3) {
-      if ($1.indexOf("next") > -1){
-        $1.replace(new RegExp("(https([^>]*))", "g"), function($0, $1, $2, $3) {
-          proximaUrl = $1; 
-        })
-      }
-    })
 
+    try {
+      links.replace(new RegExp("(<([^,]*))", "g"), function($0, $1, $2, $3) {
+        if ($1.indexOf("next") > -1){
+          $1.replace(new RegExp("(https([^>]*))", "g"), function($0, $1, $2, $3) {
+            proximaUrl = $1; 
+          })
+        }
+      });
+    }
+    catch (err){
+      proximaUrl = '';
+    }
+    
     return proximaUrl;
   }
 }
