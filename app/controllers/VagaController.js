@@ -6,7 +6,7 @@ module.exports = {
     let filtroVaga = req.query.filtroTituloVaga ? req.query.filtroTituloVaga : ' ';
     let quantidade_por_pagina = 12;
 
-    const vagas = await Vaga.find({ $or: [{title: new RegExp(filtroVaga.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')}, {body: new RegExp(filtroVaga.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')}]}, {"updated_at" : 1, "title" : 1,"repo_name" : 1, "user_avatar_url": 1}).sort({created_at: -1}).limit(quantidade_por_pagina).skip(quantidade_por_pagina * (pagina - 1));
+    const vagas = await Vaga.find({ $or: [{title: new RegExp(filtroVaga.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')}, {body: new RegExp(filtroVaga.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')}]}, {"created_at" : 1, "title" : 1,"repo_name" : 1, "user_avatar_url": 1}).sort({created_at: -1}).limit(quantidade_por_pagina).skip(quantidade_por_pagina * (pagina - 1));
     return res.json(vagas);
   },
 
