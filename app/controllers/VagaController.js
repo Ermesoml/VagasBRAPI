@@ -19,4 +19,25 @@ module.exports = {
       return res.json('{mensagem: Vaga mão encontrada!}')
     }
   },
+
+  async countRepos(req, res){
+    try{
+      const agg = [
+        {$match : {status : 'ABE'}},
+        {
+          $group: {
+            _id: "$repo_name",
+            count: { $sum: 1 }
+          }
+        }
+      ];
+
+      const vaga = await Vaga.aggregate(agg).exec();
+      return res.json(vaga);
+    }
+    catch(err){
+      console.log(err)
+      return res.json('{mensagem: Vaga mão encontrada!}')
+    }
+  },
 }

@@ -9,5 +9,6 @@ routes.get('/', (req, res) => {
 
 routes.get('/vagas', VagaController.index);
 routes.get('/vaga/:vaga_id', VagaController.findById);
+routes.get('/repositorios', VagaController.countRepos);
 
 module.exports = routes;
