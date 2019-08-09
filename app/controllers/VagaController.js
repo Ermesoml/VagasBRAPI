@@ -4,9 +4,35 @@ module.exports = {
   async index(req, res){
     let pagina = req.query.pagina ? req.query.pagina : 1;
     let filtroVaga = req.query.filtroTituloVaga ? req.query.filtroTituloVaga : ' ';
+    let filtroRepositorio = req.query.filtroRepositorio && req.query.filtroRepositorio != 'Todos' ? req.query.filtroRepositorio : '';
     let quantidade_por_pagina = 12;
 
-    const vagas = await Vaga.find({ $or: [{title: new RegExp(filtroVaga.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')}, {body: new RegExp(filtroVaga.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')}]}, {"created_at" : 1, "title" : 1,"repo_name" : 1, "user_avatar_url": 1}).sort({created_at: -1}).limit(quantidade_por_pagina).skip(quantidade_por_pagina * (pagina - 1));
+    
+
+    let filtros = { $or: 
+      [
+        {title: new RegExp(filtroVaga.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')}, 
+        {body: new RegExp (filtroVaga.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')},
+      ],
+    };
+
+    if (filtroRepositorio != ''){
+      filtros.$and = 
+      [
+        {repo_name: new RegExp (filtroRepositorio.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')}
+      ]
+    }
+
+    const vagas = await Vaga.find(
+        filtros, 
+        {
+          "created_at" : 1, 
+          "title" : 1,
+          "repo_name" : 1, 
+          "user_avatar_url": 1
+        }
+    ).sort({created_at: -1}).limit(quantidade_por_pagina).skip(quantidade_por_pagina * (pagina - 1));
+    
     return res.json(vagas);
   },
 
