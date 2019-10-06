@@ -4,76 +4,46 @@ module.exports = {
   async index(req, res){
     let pagina = req.query.pagina ? req.query.pagina : 1;
     let filtroVaga = req.query.filtroTituloVaga ? req.query.filtroTituloVaga : ' ';
-    let tipoFiltro = req.query.tipoFiltroSelecionado ? req.query.tipoFiltroSelecionado : 'S';
     let filtroRepositorio = req.query.filtroRepositorio && req.query.filtroRepositorio != 'Todos' ? req.query.filtroRepositorio : '';
     let quantidade_por_pagina = 12;
 
-    let vagas;
-
-    if (tipoFiltro === 'A'){
-      vagas = await Vaga.aggregate([
+    // Filtro avançado, substituindo os espaços (" ") por "and" nas pesquisas. O resultado é identico à busca "like" no SQL. Dica do Frederico Macedo do grupo do Slack GOJS;
+    let filtros = { $or: 
+      [
         {
-          $match: {
-            $text: {
-              $search: `"\"${new RegExp (filtroVaga.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')}\""`
-            },
-            "repo_name": new RegExp (filtroRepositorio.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')
-          }
-        },
-        
-        {
-          $project: {
-            _id: true,
-            title: true,
-            created_at : 1, 
-            title : 1,
-            repo_name : 1, 
-            user_avatar_url: 1,
-            score: {
-              $meta: 'textScore'
-            }
-          }
+          $and: [
+            ...filtroVaga.split(" ").map((item => {
+              return {body: new RegExp (item.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')}
+            }))
+          ]
         },
         {
-          $sort: {
-            score: -1
-          }
-        },
-        {
-          $limit: quantidade_por_pagina * (pagina)
-        },
-        {
-          $skip: quantidade_por_pagina * (pagina - 1)
+          $and: [
+            ...filtroVaga.split(" ").map((item => {
+              return {title: new RegExp (item.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')}
+            })) 
+          ]
         }
-      ]);
+      ],
+    };
+
+    if (filtroRepositorio != ''){
+      filtros.$and = 
+      [
+        {repo_name: new RegExp (filtroRepositorio.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')}
+      ]
     }
-    else if (tipoFiltro === 'S')
-    {
-      let filtros = { $or: 
-        [
-          {title: new RegExp(filtroVaga.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')}, 
-          {body: new RegExp (filtroVaga.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')},
-        ],
-      };
+
+    let vagas = await Vaga.find(
+        filtros, 
+        {
+          "created_at" : 1, 
+          "title" : 1,
+          "repo_name" : 1, 
+          "user_avatar_url": 1
+        }
+    ).sort({created_at: -1}).limit(quantidade_por_pagina).skip(quantidade_por_pagina * (pagina - 1));
   
-      if (filtroRepositorio != ''){
-        filtros.$and = 
-        [
-          {repo_name: new RegExp (filtroRepositorio.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')}
-        ]
-      }
-  
-      vagas = await Vaga.find(
-          filtros, 
-          {
-            "created_at" : 1, 
-            "title" : 1,
-            "repo_name" : 1, 
-            "user_avatar_url": 1
-          }
-      ).sort({created_at: -1}).limit(quantidade_por_pagina).skip(quantidade_por_pagina * (pagina - 1));
-    }
-    
     return res.json(vagas);
   },
 
