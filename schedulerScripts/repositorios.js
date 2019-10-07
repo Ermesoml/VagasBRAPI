@@ -35,4 +35,24 @@ module.exports = [
     nome: 'CangaceirosDevels',
     url: 'https://api.github.com/repos/CangaceirosDevels/vagas/issues?state=open'
   },
+  {
+    nome: 'Gommunity',
+    url: 'https://api.github.com/repos/Gommunity/vagas/issues?state=open'
+  },
+  {
+    nome: 'uxbrasil',
+    url: 'https://api.github.com/repos/uxbrasil/vagas/issues?state=open'
+  },
+  {
+    nome: 'flutter-brazil',
+    url: 'https://api.github.com/repos/flutter-brazil/vagas/issues?state=open'
+  },
+  {
+    nome: 'frontend-pt',
+    url: 'https://api.github.com/repos/frontend-pt/vagas/issues?state=open'
+  },
+  {
+    nome: 'backend-pt',
+    url: 'https://api.github.com/repos/backend-pt/vagas/issues?state=open'
+  }
 ]
