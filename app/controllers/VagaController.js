@@ -40,7 +40,8 @@ module.exports = {
           "created_at" : 1, 
           "title" : 1,
           "repo_name" : 1, 
-          "user_avatar_url": 1
+          "user_avatar_url": 1,
+          "labels": 1
         }
     ).sort({created_at: -1}).limit(quantidade_por_pagina).skip(quantidade_por_pagina * (pagina - 1));
   
