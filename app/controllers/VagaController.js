@@ -5,7 +5,7 @@ module.exports = {
     let pagina = req.query.pagina ? req.query.pagina : 1;
     let filtroVaga = req.query.filtroTituloVaga ? req.query.filtroTituloVaga : ' ';
     let filtroRepositorio = req.query.filtroRepositorio && req.query.filtroRepositorio != 'Todos' ? req.query.filtroRepositorio : '';
-    let quantidade_por_pagina = 12;
+    let quantidade_por_pagina = 24;
 
     // Filtro avançado, substituindo os espaços (" ") por "and" nas pesquisas. O resultado é identico à busca "like" no SQL. Dica do Frederico Macedo do grupo do Slack GOJS;
     let filtros = { $or: 
