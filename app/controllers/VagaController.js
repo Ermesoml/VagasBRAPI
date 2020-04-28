@@ -28,9 +28,13 @@ module.exports = {
     };
 
     if (filtroRepositorio != ''){
-      filtros.$and = 
-      [
-        {repo_name: new RegExp (filtroRepositorio.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i')}
+      filtros.$and = [
+        {repo_name: new RegExp (filtroRepositorio.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&'), 'i'), status: 'ABE'}
+      ]
+    }
+    else {
+      filtros.$and = [
+        {status: 'ABE'}
       ]
     }
 
@@ -41,7 +45,8 @@ module.exports = {
           "title" : 1,
           "repo_name" : 1, 
           "user_avatar_url": 1,
-          "labels": 1
+          "labels": 1,
+          "status": 1,
         }
     ).sort({created_at: -1}).limit(quantidade_por_pagina).skip(quantidade_por_pagina * (pagina - 1));
   
