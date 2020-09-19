@@ -3,7 +3,7 @@ const Vaga = require('../app/models/Vaga');
 
 class scheduleDatabase {
   constructor() {
-    mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useFindAndModify: false})
+    mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true})
   }
 
   async InserirAtualizarVagasBanco(vagas, repoName){
